@@ -12,7 +12,7 @@ eventHandlers.initialized = function ()
   
   math.randomseed( os.time() );
   eventHandlers.uiObjectTooltip.guiIds.parent     = tes3ui.registerID("DT_Tooltip_Parent");
-  eventHandlers.uiObjectTooltip.guiIds.trapStatus = tes3ui.registerID("DT_Tooltip_Weight");
+  eventHandlers.uiObjectTooltip.guiIds.trapStatus = tes3ui.registerID("DT_Tooltip_Trap");
 
   local feature_hiddenTraps = 70;
 
@@ -84,7 +84,7 @@ eventHandlers.uiObjectTooltip = {
     
     parent:createLabel({id=guiIds.trapStatus, text=trapMessage});
     
-   utility.dbgMsg("End detection for \"" .. ref.id .. "\"");
+    utility.dbgMsg("End detection for \"" .. ref.id .. "\"");
   end),
   params = { priority=150 },
   guiIds = {}
