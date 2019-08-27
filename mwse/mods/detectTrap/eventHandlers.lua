@@ -123,9 +123,4 @@ eventHandlers.trapDisarm = function (e)
   
 end
 
-eventHandlers.lockPick = function (e)
-  local lockPresent = e.lockPresent and "true" or "false"
-  tes3.messageBox("lockPick called!  Lock present: " .. lockPresent)
-end
-
 return eventHandlers;
