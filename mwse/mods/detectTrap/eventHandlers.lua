@@ -10,7 +10,6 @@ eventHandlers.initialized = function ()
     utility.warn(strings.mwseOutOfDate);
   end
   
-
   math.randomseed( os.time() );
   eventHandlers.uiObjectTooltip.guiIds.parent     = tes3ui.registerID("DT_Tooltip_Parent");
   eventHandlers.uiObjectTooltip.guiIds.trapStatus = tes3ui.registerID("DT_Tooltip_Weight");
@@ -31,7 +30,6 @@ eventHandlers.uiObjectTooltip = {
     
     if not utility.isLockable(ref) then return end
     
-    local cached = ref.data.DT;
     local trapped = tes3.getTrap({reference = ref}) and true or false;
     local detected = nil;
     
@@ -67,7 +65,6 @@ eventHandlers.uiObjectTooltip = {
       ref.data.DT.detected = detected;
       ref.data.DT.trapped  = trapped;
       ref.data.DT.playerSkill = tes3.mobilePlayer.security.current;
-      ref.data.DT.frozen = false;
     end
     
     local guiIds = eventHandlers.uiObjectTooltip.guiIds;
@@ -94,16 +91,14 @@ eventHandlers.uiObjectTooltip = {
 };
 
 eventHandlers.cellChanged = function (e)
-  -- On entering a cell, reset all detect trap cached data except frozen data
+  -- On entering a cell, reset all detect trap cached data
   -- Looking at previousCell might be logically better, but no guarantee the
   -- references are still correctly loaded.
   for ref in e.cell:iterateReferences() do
     if utility.isLockable(ref) then
       if ref.data.DT then
         utility.dbgMsg("Uncaching object: " .. ref.id)
-        if not ref.data.DT.frozen then
-          ref.data.DT = nil
-        end
+        ref.data.DT = nil
       end
     end
   end
