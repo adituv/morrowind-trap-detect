@@ -22,7 +22,8 @@ DetectTrap.init = function (self)
     initialized = function () self:initialized() end,
     uiObjectTooltip = function (e) self:overrideTooltip(e) end,
     cellChanged = function(e) self:clearCachesInCell(e) end,
-    trapDisarm = function(e) self:trapDisarmAttempted(e) end
+    trapDisarm = function(e) self:trapDisarmAttempted(e) end,
+    activate = function(e) self:onActivateTrappable(e) end
   };
   
   utility.registerAll(self.eventHandlers);
@@ -201,6 +202,27 @@ DetectTrap.trapDisarmAttempted = function (self, e)
   if not cache.disarmAttempted then
     cache.disarmAttempted = true;
     e.clearTarget = true;
+  end
+end
+
+DetectTrap.onActivateTrappable = function (self, e)
+  local ref = e.target;
+
+  if not isLockable(ref) then return end;
+  if e.activator ~= tes3.player then return end;
+  
+  local cache = getCachedData(ref);
+  if not cache then
+    cache = createCache(ref);
+  end
+  
+  cache.detected = true;
+  if tes3.getLocked({reference = ref}) then
+    cache.trapped = utility.coerceBool(tes3.getTrap({reference = ref}));
+  else
+    -- If trapped and not locked, then the trap will have been triggered by
+    -- activation, so there is no longer a trap.
+    cache.trapped = false;
   end
 end
 
