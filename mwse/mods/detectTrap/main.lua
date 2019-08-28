@@ -1,4 +1,3 @@
-local eventHandlers = require("detectTrap.eventHandlers");
-local utility = require("detectTrap.utility");
+local detectTrap = require("detectTrap.detectTrap");
 
-utility.registerAll(eventHandlers);
+detectTrap:init();
