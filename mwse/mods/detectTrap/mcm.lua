@@ -19,7 +19,7 @@ settings:createOnOffButton({
   }
 });
 
-local difficulty = settings:createCategory(strings.mcm.difficulty);
+local difficulty = page:createCategory(strings.mcm.difficulty);
 difficulty:createSlider({
   label = strings.mcm.midpoint,
   max = 130,
