@@ -1,6 +1,6 @@
 return mwse.loadConfig("detectTrap") or {
 
-    version = "0.9.0b";
+    version = "0.9.1b";
     debugEnabled = false;
 
     smoother = {

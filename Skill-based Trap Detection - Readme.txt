@@ -1,5 +1,5 @@
 Skill-based Trap Detection
-Version 0.9b
+Version 0.9.1b
 By AdituV
 
 With thanks to Graphic Herbalism, the lua source of which I used as reference while
@@ -37,6 +37,8 @@ Data Files.  The usual.
 
 Changelog
 =========
+0.9.1 - Added MCM settings for detection parameters.
+        Added whitelist and blacklist functionality.
 0.9.0 - Initial beta release
 
 Details
@@ -53,17 +55,15 @@ Your "effective skill level" is calculated with this formula:
 
 Where
 
-    fatigueMod = 0.25 * normalizedFatigue + 0.75
+    fatigueMod = fFatigueMult * normalizedFatigue + fFatigueBase
 
-fatigueMod ranges from 0.75 to 1.25; this is likely to be both changed and made an MCM
-setting in a future version.
-
-The effective level is smoothed along a sigmoid curve; currently this curve is hardcoded as:
+The effective level is smoothed along a sigmoid curve; the default parameters give
+the following equation:
 
     f(level) = 1 / (1 + e^(-0.05 * (level - 70))
 
-Again, the parameters of this curve will probably be tweaked and exposed via the MCM
-in a future version.
+You can modify these parameters in the MCM.  0.05 is the "steepness" term divided by
+100; 70 is the "midpoint" term.
 
 The random number generated is uniform between 0 and 1, and if that number is less than
 the smoothed effective level, the detection is considered a success.  Depending on
@@ -74,8 +74,6 @@ will be added to the tooltip.  If detection fails, "???" will be added to the to
 Planned Features
 ================
 
-* MCM to tweak detection parameters
-* Whitelist and blacklist to fine-tune whether something is lockable
 * For exteriors, don't clear cache when moving from exterior to exterior
 * For exteriors, clear cache on a timer
 * Spell to boost detection chance
