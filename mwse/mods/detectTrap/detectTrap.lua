@@ -189,11 +189,13 @@ DetectTrap.clearCachesInCell = function (self, e)
 end
 
 DetectTrap.trapDisarmAttempted = function (self, e)
-  if not isLockable(e.reference) then return end
+  local ref = e.reference;
   
-  local cache = getCachedData(e.reference);
+  if not isLockable(ref) then return end;
+  
+  local cache = getCachedData(ref);
   if not cache then
-    clearCache(e.reference);
+    cache = createCache(ref);
   end
   
   if not cache.disarmAttempted then
