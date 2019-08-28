@@ -76,10 +76,21 @@ local isLockable = function (ref)
   -- that is not organic.
   -- TODO: Whitelist, blacklist for weird organic settings?  Graphic Herbalism
   -- compatibility?
+  if not ((ref.object.objectType == tes3.objectType.container)
+       or (ref.object.objectType == tes3.objectType.door)) then
+    return false
+  end
   
-  return ref
-    and ((ref.object.objectType == tes3.objectType.container and not ref.object.organic)
-      or (ref.object.objectType == tes3.objectType.door));
+  local lockable = true;
+  if ref.object.objectType == tes3.objectType.container then
+    lockable = not ref.object.organic;
+  end
+  
+  local id = ref.baseObject.id:lower();
+  if config.blacklist[id] then lockable = false end;
+  if config.whitelist[id] then lockable = true end;
+  
+  return lockable;
 end
 
 DetectTrap.initialized = function (self)

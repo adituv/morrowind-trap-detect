@@ -8,7 +8,9 @@ local template = EasyMCM.createTemplate(strings.mcm.modName);
 template:saveOnClose("detectTrap", config);
 template:register();
 
-local page = template:createSideBarPage();
+local page = template:createSideBarPage({
+  label = strings.mcm.settings,
+});
 local settings = page:createCategory(strings.mcm.settings);
 settings:createOnOffButton({
   label = strings.mcm.debugMode,
@@ -44,5 +46,50 @@ difficulty:createSlider({
     set = function (self, value)
       config.smoother.steepness = value / 100;
     end
+  }
+});
+
+local getContainersAndDoors = function()
+  local list = {}
+  for obj in tes3.iterateObjects(tes3.objectType.container) do
+    list[#list+1] = (obj.baseObject or obj).id:lower()
+  end
+  for obj in tes3.iterateObjects(tes3.objectType.door) do
+    list[#list+1] = (obj.baseObject or obj).id:lower()
+  end
+  table.sort(list)
+  
+  return list
+end
+
+template:createExclusionsPage({
+  label = strings.mcm.blacklist,
+  description = strings.mcm.blacklistDesc,
+  leftListLabel = strings.mcm.blacklist,
+  rightListLabel = strings.mcm.objects,
+  
+  variable = EasyMCM:createTableVariable({
+    id = "blacklist",
+    table = config
+  });
+  
+  filters = {
+    { callback = getContainersAndDoors }
+  }
+});
+
+template:createExclusionsPage({
+  label = strings.mcm.whitelist,
+  description = strings.mcm.whitelistDesc,
+  leftListLabel = strings.mcm.whitelist,
+  rightListLabel = strings.mcm.objects,
+  
+  variable = EasyMCM:createTableVariable({
+    id = "whitelist",
+    table = config
+  });
+  
+  filters = {
+    { callback = getContainersAndDoors }
   }
 });
