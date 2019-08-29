@@ -1,4 +1,8 @@
-local strings = {}
+local strings_en = require("detectTrap.strings_en");
+
+local strings = {};
+
+setmetatable(strings, strings_en);
 
 strings.trapped = "Trapped";
 strings.untrapped = "Untrapped";
