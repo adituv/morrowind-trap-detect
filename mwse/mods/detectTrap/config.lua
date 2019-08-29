@@ -1,7 +1,6 @@
-return mwse.loadConfig("detectTrap") or {
-
-    version = "0.9.1b";
-    debugEnabled = false;
+local defaultConfig = {
+    version = "0.9.1b",
+    debugEnabled = false,
 
     smoother = {
         steepness = 0.05,
@@ -34,4 +33,12 @@ return mwse.loadConfig("detectTrap") or {
         ["tr_m3_oe_anjzhirra_sack"] = true,
         ["tr_m3_soil_i3-390-ind"] = true,
     },
-}
+};
+
+local mwseConfig = mwse.loadConfig("detectTrap") or {};
+
+-- Set values in the user's saved config to default to those in
+-- the default config if they are missing
+setmetatable(mwseConfig, defaultConfig);
+
+return mwseConfig;
