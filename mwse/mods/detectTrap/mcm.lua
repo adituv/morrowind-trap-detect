@@ -21,6 +21,15 @@ settings:createOnOffButton({
   }
 });
 
+settings:createOnOffButton({
+  label = strings.mcm.alwaysSuppressBlacklist,
+  description = strings.mcm.alwaysSuppressBlacklistDesc,
+  variable = EasyMCM.createTableVariable {
+    id = "alwaysSuppressBlacklist",
+    table = config
+  }
+});
+
 local difficulty = page:createCategory(strings.mcm.difficulty);
 difficulty:createSlider({
   label = strings.mcm.midpoint,

@@ -72,26 +72,28 @@ local getDetectProbability = function ()
   return smoother(effectiveLevel);
 end
 
-local isLockable = function (ref)
-  -- For now, assume something can be locked if it is a door, or if it is a container
-  -- that is not organic.
-  -- TODO: Whitelist, blacklist for weird organic settings?  Graphic Herbalism
-  -- compatibility?
-  if not ((ref.object.objectType == tes3.objectType.container)
-       or (ref.object.objectType == tes3.objectType.door)) then
-    return false
+local hasLockData = function (ref)
+  return (ref.object.objectType == tes3.objectType.container)
+       or (ref.object.objectType == tes3.objectType.door);
+end
+
+local shouldSuppressTrapInfo = function (ref)
+  local suppress = false;
+  
+  if ref.object.organic then suppress = true end;
+  
+  local id = ref.baseObject.id:lower()
+  
+  if config.blacklist[id] then suppress = true end;
+  if config.whitelist[id] then suppress = false end;
+  
+  if suppress then
+    utility.dbgMsg("    Suppressing trap info for: " .. id);
+  else
+    utility.dbgMsg("    Not suppressing trap info for: " .. id);
   end
   
-  local lockable = true;
-  if ref.object.objectType == tes3.objectType.container then
-    lockable = not ref.object.organic;
-  end
-  
-  local id = ref.baseObject.id:lower();
-  if config.blacklist[id] then lockable = false end;
-  if config.whitelist[id] then lockable = true end;
-  
-  return lockable;
+  return suppress;
 end
 
 DetectTrap.initialized = function (self)
@@ -115,8 +117,16 @@ end
 DetectTrap.overrideTooltip = function (self,e)
   local ref = e.reference;
   
-  if not isLockable(ref) then return end
+  if not (ref and hasLockData(ref)) then return end
+    
   local trapped = utility.coerceBool(tes3.getTrap({reference = ref}));
+  
+  if shouldSuppressTrapInfo and not trapped then
+    -- Ignore blacklist and organic status if something is actually
+    -- trapped.
+    return
+  end
+  
   local detected = nil;
   
   utility.dbgMsg("Beginning detection for \"" .. ref.id .. "\"");
@@ -154,22 +164,24 @@ DetectTrap.overrideTooltip = function (self,e)
     cache.playerSkill = getEffectiveSecurity(tes3.mobilePlayer);
   end
   
-  local guiIds = self.guiIds;
-  local parent = e.tooltip:createBlock({id=guiIds.parent});
-  parent.autoHeight = true;
-  parent.autoWidth = true;
-  
-  local trapMessage = strings.unknown;
-  if (detected) then
-    -- Trap or no trap successfully detected
-    if not tes3.getTrap({reference = ref}) then
-      trapMessage = strings.untrapped;
-    else
-      trapMessage = strings.trapped;
+  if not (trapped and shouldSuppressTrapInfo(ref) and config.alwaysSuppressBlacklist) then  
+    local guiIds = self.guiIds;
+    local parent = e.tooltip:createBlock({id=guiIds.parent});
+    parent.autoHeight = true;
+    parent.autoWidth = true;
+    
+    local trapMessage = strings.unknown;
+    if (detected) then
+      -- Trap or no trap successfully detected
+      if not tes3.getTrap({reference = ref}) then
+        trapMessage = strings.untrapped;
+      else
+        trapMessage = strings.trapped;
+      end
     end
+ 
+    parent:createLabel({id=guiIds.trapStatus, text=trapMessage});
   end
-  
-  parent:createLabel({id=guiIds.trapStatus, text=trapMessage});
   
   utility.dbgMsg("End detection for \"" .. ref.id .. "\"");
 end
@@ -179,7 +191,7 @@ DetectTrap.clearCachesInCell = function (self, e)
   -- Looking at previousCell might be logically better, but no guarantee the
   -- references are still correctly loaded.
   for ref in e.cell:iterateReferences() do
-    if isLockable(ref) then
+    if hasLockData(ref) then
       local cache = getCachedData(ref);
       if cache then
         utility.dbgMsg("Uncaching object: " .. ref.id)
@@ -192,7 +204,7 @@ end
 DetectTrap.trapDisarmAttempted = function (self, e)
   local ref = e.reference;
   
-  if not isLockable(ref) then return end;
+  if not hasLockData(ref) then return end;
   
   local cache = getCachedData(ref);
   if not cache then
@@ -208,7 +220,7 @@ end
 DetectTrap.onActivateTrappable = function (self, e)
   local ref = e.target;
 
-  if not isLockable(ref) then return end;
+  if not hasLockData(ref) then return end;
   if e.activator ~= tes3.player then return end;
   
   local cache = getCachedData(ref);
