@@ -1,5 +1,5 @@
 local defaultConfig = {
-    version = "1.0.0",
+    version = "0.9.2",
     debugEnabled = false,
     
     alwaysSuppressBlacklist = false,

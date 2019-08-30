@@ -1,5 +1,5 @@
 Skill-based Trap Detection
-Version 0.9.1b
+Version 0.9.2b
 By AdituV
 
 With thanks to Graphic Herbalism, the lua source of which I used as reference while
@@ -9,10 +9,8 @@ Skill-based Trap Detection is a pure-lua mod to allow the player to have a chanc
 successfully detect a trap based on their security skill and relevant attributes, with a
 formula similar to the vanilla game.
 
-This beta version has all core functionality implemented, but is missing some bells
-and whistles, such as configurable parameters in the MCM, having an MCM entry at all,
-and potentially adding spells to interact with traps.
-
+This beta version has all core functionality implemented, but is lacking features for
+magic-using characters.
 
 License
 =======
@@ -27,6 +25,7 @@ Requirements
 * Morrowind Code Patch - in particular, the "Traps hidden" option under "Game Mechanics"
 * MWSE 2.1, after 2019-08-27
 
+
 Installation
 ============
 
@@ -36,9 +35,15 @@ Data Files.  The usual.
 
 Changelog
 =========
+0.9.2 - Full rewrite
+        Added "forget on a timer" for exterior cells' lock data
+        Activation on an unlocked object now automatically detects traps
+        Bugfix: getEffectiveSecurityLevel now actually gets intelligence and luck
+                instead of just security repeatedly
 0.9.1 - Added MCM settings for detection parameters.
         Added whitelist and blacklist functionality.
 0.9.0 - Initial beta release
+
 
 Details
 =======
@@ -72,8 +77,7 @@ will be added to the tooltip.  If detection fails, "???" will be added to the to
 
 Planned Features
 ================
-
-* For exteriors, don't clear cache when moving from exterior to exterior
-* For exteriors, clear cache on a timer
-* Spell to boost detection chance
-* Spell to add a visual effect to trapped things (this is a bit of a pipe dream tbh)
+* Features for magic users:
+  - Spell to boost detection chance
+  - Spell to remove a trap (like Open)
+  - Spell to add a visual effect to nearby trapped things (maybe)
