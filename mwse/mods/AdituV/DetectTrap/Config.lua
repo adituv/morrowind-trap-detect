@@ -1,8 +1,12 @@
 local defaultConfig = {
-    version = "0.9.1b",
+    version = "1.0.0",
     debugEnabled = false,
+    
+    alwaysSuppressBlacklist = false,
 
-    smoother = {
+    forgetDuration = 5 * 60, -- 5 minutes, real time
+    
+    trapDifficulty = {
         steepness = 0.05,
         midpoint = 70
     },
@@ -35,6 +39,7 @@ local defaultConfig = {
     },
 };
 
+defaultConfig.__index = defaultConfig;
 local mwseConfig = mwse.loadConfig("detectTrap") or {};
 
 -- Set values in the user's saved config to default to those in

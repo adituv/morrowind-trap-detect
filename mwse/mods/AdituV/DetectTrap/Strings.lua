@@ -1,8 +1,14 @@
-local strings_en = require("detectTrap.strings_en");
+local strings_en = require("AdituV.DetectTrap.Strings_en");
 
 local strings = {};
 
-setmetatable(strings, strings_en);
+strings.__index = function(self, key)
+  mwse.log(string.format("[Detect Trap] MISSING LOCALISED STRING: %s.  Attempting to default to English", key));
+  return strings_en[key];
+end
+setmetatable(strings, strings);
+
+strings.modName = "Detect Trap";
 
 strings.trapped = "Trapped";
 strings.untrapped = "Untrapped";
@@ -29,6 +35,10 @@ strings.mcm = {
   alwaysSuppressBlacklist = "Suppress \"Trapped\" for blacklist",
   alwaysSuppressBlacklistDesc = "By default, the blacklist is ignored when an object is trapped.  Turn this on to "
     .. "never show trapped status for blacklisted objects, even when they're actually trapped.",
+  
+  forgetAfter = "Forget traps after: (seconds)"
+  forgetAfterDesc = "When remaining purely in exterior cells, forget which containers are trapped after this many"
+    .. "real-world seconds spent in-game (not including time spent in menus)";
   
   settings  = "Settings",
   

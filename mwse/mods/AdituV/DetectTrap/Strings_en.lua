@@ -1,4 +1,12 @@
-local strings = {}
+local strings = {};
+
+strings.__index = function(self, key)
+  mwse.log(string.format("[Detect Trap] MISSING STRING: " .. key));
+  return "MISSING STRING";
+end
+setmetatable(strings,strings);
+
+strings.modName = "Detect Trap";
 
 strings.trapped = "Trapped";
 strings.untrapped = "Untrapped";
@@ -18,8 +26,13 @@ strings.invalidHandlerUnregistering = "Invalid handler when unregistering event 
 
 strings.mcm = {
   modName = "Skill-based Trap Detection",
+  
   debugMode = "Debug Mode",
   debugModeDesc = "Enable extra log messages in MWSE.log",
+  
+  alwaysSuppressBlacklist = "Suppress \"Trapped\" for blacklist",
+  alwaysSuppressBlacklistDesc = "By default, the blacklist is ignored when an object is trapped.  Turn this on to "
+    .. "never show trapped status for blacklisted objects, even when they're actually trapped.",
   
   settings  = "Settings",
   
