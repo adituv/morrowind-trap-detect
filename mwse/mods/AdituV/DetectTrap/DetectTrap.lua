@@ -119,33 +119,6 @@ local onTooltip = function(e)
   addExtraInfo(e.tooltip, ld);
 end
 
---[[
-local onCellChange = function(e)
-  -- If we are first loading the game, previousCell will be nil, and this event
-  -- should be skipped
-  if not e.previousCell then return end;
-  
-  -- If we are transitioning from an exterior to an exterior, don't forget anything:
-  -- these will be handled on a timer
-  if not e.previousCell.isInterior and not e.cell.isInterior then return end;
-  
-  Utility.Log.debug("Changing cell, not E->E");
-  
-  -- We have now transitioned either to an interior, or to an exterior from an interior,
-  -- and should therefore clear all known locks in the cell
-  for ref in e.cell:iterateReferences(tes3.objectType.container) do
-    LockData.forgetData(ref);
-  end
-  
-  for ref in e.cell:iterateReferences(tes3.objectType.door) do
-    LockData.forgetData(ref);
-  end
-  
-  -- Finally, we invalidate all lockdata analysed before the current time
-  invalidationTime = mwse.simulateTimers.clock;
-end
-]]--
-
 local onCellChange = function(e)
   -- If we are first loading the game, previousCell will be nil, and this event
   -- should be skipped
