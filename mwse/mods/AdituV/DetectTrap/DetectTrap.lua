@@ -163,7 +163,9 @@ local onProbeUsed = function(e)
   -- Using a probe will always tell you whether a trap is present
   
   local ld = LockData.getForReference(e.reference);
-  ld:setTrapDetected(true);
+  if ld then
+    ld:setTrapDetected(true);
+  end
 end
 
 local onActivate = function(e)
@@ -173,7 +175,7 @@ local onActivate = function(e)
   
   local ld = LockData.getForReference(e.target);
   
-  if not ld.locked then
+  if ld and not ld.locked then
     ld:setTrapDetected(true);
   end
 end
