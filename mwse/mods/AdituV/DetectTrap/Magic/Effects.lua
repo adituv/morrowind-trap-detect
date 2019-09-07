@@ -1,7 +1,6 @@
 local Config = require("AdituV.DetectTrap.Config");
 local LockData = require("AdituV.DetectTrap.LockData");
 local Strings = require("AdituV.DetectTrap.Strings");
-local Utility = require("AdituV.DetectTrap.Utility");
 
 local defaultEffect = {
   speed = 1,
