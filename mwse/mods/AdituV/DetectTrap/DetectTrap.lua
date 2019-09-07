@@ -71,7 +71,7 @@ local onTooltip = function(e)
   
   if not ld then return end;
   
-  if shouldSuppressTrapInfo(e.reference) and (not trapped or Config.alwaysSuppressBlacklist) then
+  if shouldSuppressTrapInfo(e.reference) and (not ld.trapped or Config.alwaysSuppressBlacklist) then
     -- When something should generally not display trapped status, and is
     -- not trapped, then leave tooltip as-is.
     -- If something that should be suppressed is trapped, then ignore the
@@ -139,6 +139,9 @@ local onProbeUsed = function(e)
   if ld then
     ld:setTrapDetected(true);
   end
+  
+  -- Force refresh tooltip
+  e.clearTarget = true;
 end
 
 local onActivate = function(e)
