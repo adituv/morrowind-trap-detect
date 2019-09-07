@@ -1,5 +1,6 @@
 local Config = require("AdituV.DetectTrap.Config");
-local Effects = require("AdituV.DetectTrap.Effects");
+local Effects = require("AdituV.DetectTrap.Magic.Effects");
+local Spells = require("AdituV.DetectTrap.Magic.Spells");
 local LockData = require("AdituV.DetectTrap.LockData");
 local MCPFeature = require("AdituV.DetectTrap.Utility.McpFeature");
 local MobilePlayer = require("AdituV.DetectTrap.MobilePlayer");
@@ -177,6 +178,9 @@ function DetectTrap:init()
   event.register("activate", onActivate);
   event.register("magicEffectsResolved", function ()
     Effects.registerEffects();
+  end);
+  event.register("loaded", function()
+    Spells.registerSpells();
   end);
 end
 

@@ -1,6 +1,7 @@
 local Config = require("AdituV.DetectTrap.Config");
 local LockData = require("AdituV.DetectTrap.LockData");
 local Strings = require("AdituV.DetectTrap.Strings");
+local Utility = require("AdituV.DetectTrap.Utility");
 
 local defaultEffect = {
   speed = 1,
@@ -31,8 +32,10 @@ local defaultEffect = {
 }
 
 local Effects = {};
+Effects.definitions = {};
+
 Effects.definitions["adv_dt_untrap"] = {
-  id = "adv_dt_untrap",
+  id = Config.effects["adv_dt_untrap"].numId;
   name = Strings.effects.untrap,
   description = Strings.effects.untrapDescription,
   school = tes3.magicSchool.alteration;
@@ -50,7 +53,7 @@ Effects.definitions["adv_dt_untrap"] = {
   hasNoMagnitude = true,
   unreflectable = true,
 
-  icon = "s/Tx_S_open.tga",
+  icon = "Tx_S_open.tga",
   particleTexture = "vfx_alt_glow.tga",
   castSound = "alteration cast",
   castVFX = "VFX_AlterationCast",
@@ -67,13 +70,15 @@ Effects.definitions["adv_dt_untrap"] = {
       return
     end
 
-    local ld = LockData.getForReference(e.target);
+    Utility.Log.debug("Untrap tick on %s", e.effectInstance.target.id);
+
+    local ld = LockData.getForReference(e.effectInstance.target);
     if ld then
       ld:setTrapDetected(true);
 
       event.trigger("trapDisarm", {
-        reference = e.target,
-        lockData = e.target.attachments.lock,
+        reference = e.effectInstance.target,
+        lockData = e.effectInstance.target.attachments.lock,
         disarmer = e.caster,
 
         -- Pretend we're using the SecretMaster's Probe to try
@@ -90,12 +95,14 @@ Effects.definitions["adv_dt_untrap"] = {
         trapPresent = true
       });
 
+      Utility.Log.debug("Untrapping %s.  Trapped: %s", e.effectInstance.target.id, ld.trapped);
+
       if ld.trapped then
         tes3.playSound({
           sound = "Disarm Trap",
-          reference = e.target
+          reference = e.effectInstance.target
         });
-        tes3.setTrap({reference = e.target, spell = nil});
+        tes3.setTrap({reference = e.effectInstance.target, spell = nil});
 
         tes3.messageBox(Strings.effects.untrapSuccess);
       end
@@ -110,6 +117,8 @@ for k,v in pairs(Effects.definitions) do
   v.__index = defaultEffect;
 
   tes3.claimSpellEffectId(k, Config.effects[k].numId);
+  Utility.Log.debug("Claiming spell effect %s as %d", k, Config.effects[k].numId);
+  Utility.Log.debug("  Checking: %d", tes3.effect[k]);
 end
 
 Effects.registerEffects = function()

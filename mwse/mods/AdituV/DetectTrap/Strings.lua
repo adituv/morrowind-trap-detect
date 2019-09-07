@@ -32,6 +32,10 @@ strings.effects = {
   untrapSuccess = "Your spell has removed the trap from its target.",
 };
 
+strings.spells = {
+  untrap = "Aditu's Disarm Trap",
+}
+
 strings.mcm = {
   modName = "Skill-based Trap Detection",
   
