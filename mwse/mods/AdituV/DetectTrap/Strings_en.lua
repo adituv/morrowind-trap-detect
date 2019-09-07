@@ -24,6 +24,12 @@ strings.mwseOutOfDate = "Your MWSE is out of date! You will need to update to a 
 strings.invalidHandlerRegistering = "Invalid handler when registering event \"%s\""
 strings.invalidHandlerUnregistering = "Invalid handler when unregistering event \"%s\""
 
+strings.effects = {
+  untrap = "Untrap",
+  untrapDescription = "This effect removes a trap from a trapped container or door.",
+  untrapSuccess = "Your spell has removed the trap from its target.",
+};
+
 strings.mcm = {
   modName = "Skill-based Trap Detection",
   
@@ -33,6 +39,10 @@ strings.mcm = {
   alwaysSuppressBlacklist = "Suppress \"Trapped\" for blacklist",
   alwaysSuppressBlacklistDesc = "By default, the blacklist is ignored when an object is trapped.  Turn this on to "
     .. "never show trapped status for blacklisted objects, even when they're actually trapped.",
+  
+  forgetAfter = "Forget traps after: (seconds)",
+  forgetAfterDesc = "When remaining purely in exterior cells, forget which containers are trapped after this many"
+    .. "real-world seconds spent in-game (not including time spent in menus)",
   
   settings  = "Settings",
   
