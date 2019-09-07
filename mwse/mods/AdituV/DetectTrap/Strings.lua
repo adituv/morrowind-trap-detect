@@ -26,6 +26,12 @@ strings.mwseOutOfDate = "Your MWSE is out of date! You will need to update to a 
 strings.invalidHandlerRegistering = "Invalid handler when registering event \"%s\""
 strings.invalidHandlerUnregistering = "Invalid handler when unregistering event \"%s\""
 
+strings.effects = {
+  untrap = "Untrap",
+  untrapDescription = "This effect removes a trap from a trapped container or door.",
+  untrapSuccess = "Your spell has removed the trap from its target.",
+};
+
 strings.mcm = {
   modName = "Skill-based Trap Detection",
   

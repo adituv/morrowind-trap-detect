@@ -37,6 +37,15 @@ local defaultConfig = {
         ["tr_m3_oe_anjzhirra_sack"] = true,
         ["tr_m3_soil_i3-390-ind"] = true,
     },
+    
+    effects = {
+      ["adv_dt_untrap"] = {
+        numId = 6301,
+        baseCost = 5,
+        speed = 1,
+        lighting = { 0, 0, 0 },
+      }
+    },
 };
 
 defaultConfig.__index = defaultConfig;

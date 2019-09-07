@@ -1,4 +1,5 @@
 local Config = require("AdituV.DetectTrap.Config");
+local Effects = require("AdituV.DetectTrap.Effects");
 local LockData = require("AdituV.DetectTrap.LockData");
 local MCPFeature = require("AdituV.DetectTrap.Utility.McpFeature");
 local MobilePlayer = require("AdituV.DetectTrap.MobilePlayer");
@@ -174,6 +175,9 @@ function DetectTrap:init()
   event.register("cellChanged", onCellChange);
   event.register("trapDisarm", onProbeUsed);
   event.register("activate", onActivate);
+  event.register("magicEffectsResolved", function ()
+    Effects.registerEffects();
+  end);
 end
 
 return DetectTrap;
